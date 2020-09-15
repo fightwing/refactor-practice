@@ -1,5 +1,10 @@
 package com.twu.refactoring;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Direction {
     private final char direction;
 
@@ -7,33 +12,24 @@ public class Direction {
         this.direction = direction;
     }
 
+    List<String> dirList = new ArrayList<>(Arrays.asList("N", "E","S", "W"));
+
     public Direction turnRight() {
-        switch (direction) {
-            case 'N':
-                return new Direction('E');
-            case 'S':
-                return new Direction('W');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
-        }
+
+       int index = dirList.indexOf(String.valueOf(direction));
+       if (index == 3){
+           return new Direction('N');
+       }else {
+           return new Direction(dirList.get(index+1).toCharArray()[0]);
+       }
     }
 
     public Direction turnLeft() {
-        switch (direction) {
-            case 'N':
-                return new Direction('W');
-            case 'S':
-                return new Direction('E');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
+        int index = dirList.indexOf(String.valueOf(direction));
+        if (index == 0){
+            return new Direction('W');
+        }else {
+            return new Direction(dirList.get(index-1).toCharArray()[0]);
         }
     }
 
