@@ -26,9 +26,9 @@ public class DateParser {
         this.dateAndTimeString = dateAndTimeString;
     }
 
-    public Date parse() {
-        int year, month, date, hour, minute;
+    int year, month, date, hour, minute;
 
+    public void formatYear(){
         try {
             String yearString = dateAndTimeString.substring(0, 4);
             year = Integer.parseInt(yearString);
@@ -39,7 +39,9 @@ public class DateParser {
         }
         if (year < 2000 || year > 2012)
             throw new IllegalArgumentException("Year cannot be less than 2000 or more than 2012");
+    }
 
+    public void formatMonth(){
         try {
             String monthString = dateAndTimeString.substring(5, 7);
             month = Integer.parseInt(monthString);
@@ -50,7 +52,9 @@ public class DateParser {
         }
         if (month < 1 || month > 12)
             throw new IllegalArgumentException("Month cannot be less than 1 or more than 12");
+    }
 
+    public void formatDate(){
         try {
             String dateString = dateAndTimeString.substring(8, 10);
             date = Integer.parseInt(dateString);
@@ -61,33 +65,45 @@ public class DateParser {
         }
         if (date < 1 || date > 31)
             throw new IllegalArgumentException("Date cannot be less than 1 or more than 31");
+    }
 
+    public void formatHour(){
+        try {
+            String hourString = dateAndTimeString.substring(11, 13);
+            hour = Integer.parseInt(hourString);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Hour string is less than 2 characters");
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Hour is not an integer");
+        }
+        if (hour < 0 || hour > 23)
+            throw new IllegalArgumentException("Hour cannot be less than 0 or more than 23");
+
+    }
+
+    public void formatMinute(){
+        try {
+            String minuteString = dateAndTimeString.substring(14, 16);
+            minute = Integer.parseInt(minuteString);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Minute string is less than 2 characters");
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Minute is not an integer");
+        }
+        if (minute < 0 || minute > 59)
+            throw new IllegalArgumentException("Minute cannot be less than 0 or more than 59");
+    }
+
+    public Date parse() {
+        formatYear();
+        formatMonth();
+        formatDate();
         if (dateAndTimeString.substring(11, 12).equals("Z")) {
             hour = 0;
             minute = 0;
         } else {
-            try {
-                String hourString = dateAndTimeString.substring(11, 13);
-                hour = Integer.parseInt(hourString);
-            } catch (StringIndexOutOfBoundsException e) {
-                throw new IllegalArgumentException("Hour string is less than 2 characters");
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Hour is not an integer");
-            }
-            if (hour < 0 || hour > 23)
-                throw new IllegalArgumentException("Hour cannot be less than 0 or more than 23");
-
-            try {
-                String minuteString = dateAndTimeString.substring(14, 16);
-                minute = Integer.parseInt(minuteString);
-            } catch (StringIndexOutOfBoundsException e) {
-                throw new IllegalArgumentException("Minute string is less than 2 characters");
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Minute is not an integer");
-            }
-            if (minute < 0 || minute > 59)
-                throw new IllegalArgumentException("Minute cannot be less than 0 or more than 59");
-
+            formatHour();
+            formatMinute();
         }
 
         Calendar calendar = Calendar.getInstance();
